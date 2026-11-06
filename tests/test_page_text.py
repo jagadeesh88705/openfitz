@@ -41,3 +41,4 @@ def test_page_get_text_blocks(sample_pdf_bytes):
         first = blocks[0]
         assert len(first) == 7
         assert isinstance(first[4], str)
+

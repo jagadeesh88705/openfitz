@@ -60,3 +60,4 @@ def test_matrix():
     assert m.b == 0.0
     assert m.c == 0.0
     assert len(m) == 6
+

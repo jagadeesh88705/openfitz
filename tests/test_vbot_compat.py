@@ -80,3 +80,4 @@ def test_vbot_checkbox_darkness_detection(sample_pdf_bytes):
 
         # Empty white area should have ratio 0.0
         assert empty_ratio < 0.01, f"Expected empty space, got ratio {empty_ratio}"
+

@@ -233,3 +233,4 @@ class Matrix:
 
     def __repr__(self) -> str:
         return f"Matrix({self.a}, {self.b}, {self.c}, {self.d}, {self.e}, {self.f})"
+

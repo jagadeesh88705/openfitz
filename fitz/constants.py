@@ -13,3 +13,4 @@ csGRAY = 2
 # Font flags
 TEXT_FONT_BOLD = 1
 TEXT_FONT_ITALIC = 2
+

@@ -29,4 +29,5 @@ venv/
 ENV/
 .idea/
 .vscode/
-tests/fixtures/*.pdf
+
+

@@ -52,3 +52,4 @@ class Pixmap:
 
     def __repr__(self) -> str:
         return f"Pixmap(width={self.width}, height={self.height}, n={self.n}, samples_len={len(self.samples)})"
+

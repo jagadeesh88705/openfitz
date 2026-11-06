@@ -130,3 +130,4 @@ class Document:
     def __repr__(self) -> str:
         state = "closed" if self._is_closed else f"pages={self.page_count}"
         return f"Document({self._filename or 'stream'}, {state})"
+

@@ -37,3 +37,4 @@ __all__ = [
     "TEXT_FONT_ITALIC",
     "__version__",
 ]
+
