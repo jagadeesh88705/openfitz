@@ -200,7 +200,12 @@ class Page:
         Supports darkness/checkbox pixel counting via pix.samples.
         """
         w, h = self._page.get_size()
-        scale = float(matrix.a) if matrix is not None else 1.0
+        if "dpi" in kwargs and matrix is None:
+            scale = float(kwargs["dpi"]) / 72.0
+        elif matrix is not None:
+            scale = float(matrix.a)
+        else:
+            scale = 1.0
 
         if clip is not None:
             c = Rect(clip)

@@ -47,7 +47,10 @@ class Pixmap:
         """Returns the image as encoded bytes in the specified format."""
         img = self.to_pil()
         buf = io.BytesIO()
-        img.save(buf, format=output_format)
+        fmt = output_format.upper()
+        if fmt == "JPG":
+            fmt = "JPEG"
+        img.save(buf, format=fmt)
         return buf.getvalue()
 
     def __repr__(self) -> str:
