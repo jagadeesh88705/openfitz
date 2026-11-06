@@ -54,4 +54,4 @@ Repository = "https://github.com/jagadeesh88705/openfitz"
 Issues = "https://github.com/jagadeesh88705/openfitz/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["fitz"]
+packages = ["fitz", "openfitz"]
