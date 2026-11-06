@@ -1,4 +1,4 @@
-"""Document implementation wrapping pypdfium2 with PyMuPDF-compatible interface."""
+"""Document implementation wrapping pypdfium2 with high-level Pythonic interface."""
 
 from __future__ import annotations
 import io
@@ -11,7 +11,7 @@ from .page import Page
 
 
 class Document:
-    """Represents a PDF document with PyMuPDF-compatible methods."""
+    """Represents a PDF document with page access, bookmark traversal, and save operations."""
 
     def __init__(
         self,
@@ -80,7 +80,7 @@ class Document:
         toc_list: List[Any] = []
         try:
             for item in self._doc.get_toc():
-                level = int(item.level) + 1  # 1-based level in PyMuPDF
+                level = int(item.level) + 1  # 1-based hierarchy level
                 title = str(item.title) if item.title else ""
                 page_num = (int(item.page_index) + 1) if item.page_index is not None else 1
                 if simple:
@@ -130,4 +130,3 @@ class Document:
     def __repr__(self) -> str:
         state = "closed" if self._is_closed else f"pages={self.page_count}"
         return f"Document({self._filename or 'stream'}, {state})"
-

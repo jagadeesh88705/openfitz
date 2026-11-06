@@ -1,4 +1,4 @@
-"""Geometry classes matching PyMuPDF (fitz): Point, Rect, and Matrix."""
+"""Geometry classes: Point, Rect, and Matrix."""
 
 from __future__ import annotations
 from typing import Any, Iterator, Sequence, Tuple, Union

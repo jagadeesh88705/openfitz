@@ -1,4 +1,4 @@
-"""Pixmap implementation matching PyMuPDF (fitz) visual rendering API."""
+"""Pixmap implementation for visual raster rendering and pixel analysis."""
 
 from __future__ import annotations
 import io

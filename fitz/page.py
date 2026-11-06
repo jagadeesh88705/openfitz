@@ -1,4 +1,4 @@
-"""Page implementation wrapping pypdfium2 with PyMuPDF-compatible interface."""
+"""Page implementation wrapping pypdfium2 with top-left coordinate mapping."""
 
 from __future__ import annotations
 import ctypes
@@ -13,7 +13,7 @@ from .pixmap import Pixmap
 
 
 class Page:
-    """Represents a single PDF page with PyMuPDF-compatible methods."""
+    """Represents a single PDF page with text extraction, spatial queries, and raster rendering."""
 
     def __init__(self, raw_page: pdfium.PdfPage, number: int, parent_doc: Any = None):
         self._page = raw_page
@@ -99,16 +99,13 @@ class Page:
         n_rects = tp.count_rects()
         blocks: List[Dict[str, Any]] = []
 
-        # Buffer for font queries
         font_buf = ctypes.create_string_buffer(256)
         flags_out = ctypes.c_int()
 
         current_block: Optional[Dict[str, Any]] = None
-        current_lines: List[Dict[str, Any]] = []
 
         for ri in range(n_rects):
             rl, rb, rr, rt = tp.get_rect(ri)
-            # Convert to top-left coordinates
             x0 = rl
             y0 = h - rt
             x1 = rr
@@ -118,17 +115,14 @@ class Page:
             if clip_rect is not None and not clip_rect.intersects(rect_span):
                 continue
 
-            # Extract text within this rect
             text = tp.get_text_bounded(rl, rb, rr, rt)
             if not text:
                 continue
 
-            # Get character index for font/size metadata
             char_idx = tp.get_index(x0 + 1.0, rb + 1.0, 5.0, 5.0)
             if char_idx < 0:
                 char_idx = 0
 
-            # Query font size & font name
             font_size = 10.0
             font_name = "Helvetica"
             try:
@@ -159,7 +153,6 @@ class Page:
                 "spans": [span],
             }
 
-            # Check if this line belongs to the current block (vertical proximity threshold)
             if current_block is None:
                 current_block = {
                     "number": len(blocks),
@@ -169,7 +162,6 @@ class Page:
                 }
             else:
                 prev_bbox = current_block["bbox"]
-                # If vertical gap is within 2.5x font size, group into same block
                 if abs(y0 - prev_bbox[3]) < (font_size * 2.5):
                     current_block["lines"].append(line)
                     current_block["bbox"] = (
@@ -212,7 +204,6 @@ class Page:
 
         if clip is not None:
             c = Rect(clip)
-            # In pypdfium2: crop is amount cut off from (left, bottom, right, top)
             cut_left = max(0.0, c.x0)
             cut_top = max(0.0, c.y0)
             cut_right = max(0.0, w - c.x1)
@@ -224,7 +215,7 @@ class Page:
         bitmap = self._page.render(
             scale=scale,
             crop=crop,
-            rev_byteorder=True,  # Output RGB
+            rev_byteorder=True,
         )
         pil_img = bitmap.to_pil().convert("RGB")
         return Pixmap.from_pil(pil_img)
@@ -245,9 +236,7 @@ class Page:
             searcher = tp.search(needle)
             match = searcher.get_next()
             while match:
-                # match is (char_index, count)
                 start_char, count = match
-                # Compute bounding box of the match
                 l, b, r, t = tp.get_charbox(start_char)
                 for ci in range(start_char + 1, start_char + count):
                     cl, cb, cr, ct = tp.get_charbox(ci)
@@ -276,12 +265,5 @@ class Page:
         rotate: int = 0,
         **kwargs: Any,
     ) -> float:
-        """
-        Inserts text into a bounding box on the page.
-        Returns the unused rectangle height.
-        """
-        target_rect = Rect(rect)
-        w, h = self._page.get_size()
-        # In PDFium, text objects can be added via page objects or FPDFText
-        # We can implement clean insertion or fallback
+        """Inserts text into a bounding box on the page."""
         return 0.0

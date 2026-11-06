@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "openfitz"
 version = "0.1.0"
-description = "Permissive (MIT) drop-in replacement for PyMuPDF (fitz) powered by Google PDFium."
+description = "A fast, lightweight Python library for PDF document parsing, spatial text extraction, and raster rendering, powered by Google PDFium."
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
@@ -27,15 +27,15 @@ classifiers = [
     "Topic :: Text Processing :: General",
 ]
 keywords = [
-    "fitz",
-    "pymupdf",
     "pdf",
     "pdfium",
     "pypdfium2",
-    "permissive",
-    "mit-license",
     "spatial-extraction",
+    "bounding-box",
+    "pdf-parser",
+    "raster-rendering",
     "checkbox-detection",
+    "mit-license",
 ]
 dependencies = [
     "pypdfium2>=4.30.0",
@@ -45,7 +45,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
-    "reportlab>=3.6.0",
 ]
 
 [project.urls]

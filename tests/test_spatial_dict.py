@@ -2,10 +2,10 @@ import pytest
 import fitz
 
 
-def test_vbot_spatial_dict_structure(sample_pdf_bytes):
+def test_spatial_dict_structure(sample_pdf_bytes):
     """
-    Tests that get_text('dict') produces the exact dictionary schema
-    expected by Vbot-Poc's build_text_positions() in text_positions.py.
+    Tests that get_text('dict') produces a structured dictionary schema
+    containing blocks, lines, and spans with bounding box metadata.
     """
     with fitz.open(stream=sample_pdf_bytes, filetype="pdf") as doc:
         page = doc[0]
@@ -38,9 +38,9 @@ def test_vbot_spatial_dict_structure(sample_pdf_bytes):
         assert found_span is True
 
 
-def test_vbot_checkbox_darkness_detection(sample_pdf_bytes):
+def test_checkbox_darkness_detection(sample_pdf_bytes):
     """
-    Tests the exact checkbox detection logic from Vbot-Poc spatial_extraction.py:
+    Tests visual checkbox detection via raster rendering:
         fitz_rect = fitz.Rect(rect[0], rect[1], rect[2], rect[3])
         mat = fitz.Matrix(2, 2)
         pix = page.get_pixmap(matrix=mat, clip=fitz_rect)
@@ -80,4 +80,3 @@ def test_vbot_checkbox_darkness_detection(sample_pdf_bytes):
 
         # Empty white area should have ratio 0.0
         assert empty_ratio < 0.01, f"Expected empty space, got ratio {empty_ratio}"
-

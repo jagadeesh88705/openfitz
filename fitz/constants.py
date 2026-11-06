@@ -1,4 +1,4 @@
-"""Constants matching PyMuPDF (fitz) enum definitions."""
+"""Constants for text alignment and colorspaces."""
 
 # Text Alignment
 TEXT_ALIGN_LEFT = 0

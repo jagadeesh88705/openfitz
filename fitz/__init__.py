@@ -1,4 +1,4 @@
-"""openfitz - A permissive (MIT) drop-in replacement for PyMuPDF (fitz) powered by Google PDFium."""
+"""openfitz - A fast, lightweight Python library for PDF parsing, spatial extraction, and raster rendering powered by Google PDFium."""
 
 from __future__ import annotations
 import io
@@ -32,7 +32,7 @@ def open(
 ) -> Document:
     """
     Opens a PDF document from a file path or in-memory byte stream.
-    Compatible with PyMuPDF's fitz.open().
+    Returns a Document object.
     """
     return Document(filename=filename, stream=stream, filetype=filetype, **kwargs)
 
@@ -55,4 +55,3 @@ __all__ = [
     "TEXT_FONT_ITALIC",
     "__version__",
 ]
-

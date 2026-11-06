@@ -1,4 +1,4 @@
-"""openfitz - Permissive (MIT) drop-in replacement for PyMuPDF (fitz)."""
+"""openfitz - A fast, lightweight Python library for PDF parsing, spatial extraction, and raster rendering."""
 
 from fitz import (
     Document,
