@@ -73,6 +73,7 @@ class Document:
         Returns the table of contents / bookmarks.
         When simple=True, returns list of [level, title, page_number] where
         level >= 1 and page_number is 1-indexed.
+        Compatible with both pypdfium2 v4 and v5.
         """
         if self._is_closed:
             return []
@@ -80,13 +81,27 @@ class Document:
         toc_list: List[Any] = []
         try:
             for item in self._doc.get_toc():
-                level = int(item.level) + 1  # 1-based hierarchy level
-                title = str(item.title) if item.title else ""
-                page_num = (int(item.page_index) + 1) if item.page_index is not None else 1
+                level = int(getattr(item, "level", 0)) + 1
+                if callable(getattr(item, "get_title", None)):
+                    title = item.get_title()
+                else:
+                    title = getattr(item, "title", "")
+                title = str(title) if title else ""
+
+                page_index = None
+                if callable(getattr(item, "get_dest", None)):
+                    dest = item.get_dest()
+                    if dest and callable(getattr(dest, "get_index", None)):
+                        page_index = dest.get_index()
+                elif hasattr(item, "page_index"):
+                    page_index = item.page_index
+
+                page_num = (int(page_index) + 1) if page_index is not None else 1
                 if simple:
                     toc_list.append([level, title, page_num])
                 else:
-                    toc_list.append([level, title, page_num, item.view_pos or {}])
+                    view_pos = getattr(item, "view_pos", {}) or {}
+                    toc_list.append([level, title, page_num, view_pos])
         except Exception:
             pass
 
